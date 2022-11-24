@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/perfy.dir/src/main.cpp.o -o perfy   -L/home/kmarszal/Documents/uni/laos/perfy/cmake-build-debug/../install/lib  -Wl,-rpath,/home/kmarszal/Documents/uni/laos/perfy/cmake-build-debug/../install/lib:/home/kmarszal/Documents/uni/laos/perfy/cmake-build-debug/toolkit: toolkit/libtoolkit.so 
