@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/toolkit_test.dir/src/services_tests.cpp.o -o toolkit_test  -Wl,-rpath,/home/kmarszal/Documents/uni/laos/perfy/cmake-build-debug/toolkit::::::: /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so.1.74.0 ../libtoolkit.so 
