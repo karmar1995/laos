@@ -1,5 +1,5 @@
-./perfy/build/
-./perfy/install/
-./perfy/toolkit/build/
-./perfy/cmake-build-debug
-./perfy/cmake-build-release
+perfy/build/
+perfy/install/
+perfy/toolkit/build/
+perfy/cmake-build-debug
+perfy/cmake-build-release
