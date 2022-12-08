@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
 	toolkit::GeneratorServices generators;
-	
+
 	if(generators.tcpGenerator()) {
 		generators.tcpGenerator()->ping({ "192.168.1.1", 100, 1024 });
 	}
@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 	}
 
 	if(generators.udpGenerator()) {
-		generators.udpGenerator()->ping({ "192.168.1.2", 10, 2048 });
+		generators.udpGenerator()->ping({ "localhost", 10, 2048 });
 	}
 	else {
 		std::cout<<"Udp generator not available"<<std::endl;
