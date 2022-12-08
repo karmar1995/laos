@@ -1,15 +1,15 @@
 #pragma once
-#include <generator.h>
+#include <generator.hpp>
 #include <memory>
 
 namespace toolkit {
 	namespace generators {
 
-		class UdpGenerator : public IGenerator
+		class IcmpGenerator : public IGenerator
 		{
 		public:
-			UdpGenerator();
-			~UdpGenerator();
+			IcmpGenerator();
+			~IcmpGenerator();
 			bool ping(const PingInfo&) override;
 		private:
 			struct Impl;
