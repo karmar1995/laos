@@ -7,7 +7,8 @@ namespace toolkit {
 		std::string target;	// ip or hostname of ping target
 		int interval = 0;	// interval between packets
 		int packetSize = 0;	// packet size, in bytes
-		// in_port_t = 0; // port for tcp/udp
+        int packetsNumber = 0;
+		std::string port = 0; // port for tcp/udp
 	};
 
 	class IGenerator {
