@@ -1,0 +1,15 @@
+build
+*.o
+.*
+
+a.out
+
+!.idea
+
+!.clang-format
+!.cocciconfig
+!.get_maintainer.ignore
+!.gitattributes
+!.gitignore
+!.github
+!.mailmap
