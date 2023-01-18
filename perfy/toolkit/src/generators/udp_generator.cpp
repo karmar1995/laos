@@ -1,6 +1,7 @@
 #include "udp_generator.hpp"
 #include <boost/asio/ip/address_v4.hpp>
 #include <iostream>
+#include "ping_controller.hpp"
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -9,12 +10,34 @@
 
 using boost::asio::ip::icmp;
 using boost::asio::ip::udp;
-using boost::asio::ip::address;
 using boost::asio::deadline_timer;
-namespace posix_time = boost::posix_time;
+
 
 namespace toolkit {
 namespace generators {
+
+	class UdpPingListener : IPingListener {
+        public:
+            void onPingBegin(const PingInfo&) override;
+            void onPingSent(std::vector<char> buffer) override;
+            void onPingReceived(std::vector<char> buffer) override;
+            void onPingEnd() override;
+            ~UdpPingListener();
+		
+		private:
+			
+        };
+
+
+    class UdpPacketFactory : IPacketFactory {
+    public:
+        std::vector<char> generateEchoPacket(size_t size)
+		{
+			return std::vector<char>(size, 0);
+		}
+
+        ~UdpPacketFactory();
+    };
 
 	struct UdpGenerator::Impl
 	{

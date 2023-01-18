@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE ServicesTest
 #include <boost/test/unit_test.hpp>
 
-#include "services.h"
+#include "services.hpp"
 
 struct Fixture {
 	Fixture() {
