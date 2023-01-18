@@ -14,10 +14,25 @@ namespace toolkit {
             ~IPingListener() = default;
         };
 
+        class UdpPingListener : IPingListener {
+        public:
+            void onPingBegin(const PingInfo&) override;
+            void onPingSent(std::vector<char> buffer) override;
+            void onPingReceived(std::vector<char> buffer) override;
+            void onPingEnd() override;
+            ~UdpPingListener();
+        };
+
         class IPacketFactory {
         public:
             virtual std::vector<char> generateEchoPacket(size_t size) = 0;
             virtual ~IPacketFactory() = default;
+        };
+
+        class UdpPacketFactory : IPacketFactory {
+        public:
+            std::vector<char> UdpPacketFactory::generateEchoPacket(size_t size) override;
+            ~UdpPacketFactory();
         };
 
         class PingController {
