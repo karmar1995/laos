@@ -11,8 +11,10 @@ add_library(toolkit SHARED
 	src/generators/tcp_generator.cpp
 	src/generators/udp_generator.cpp
 	src/generators/icmp_generator.cpp
+		src/generators/icmp_socket.cpp
 	src/generators/udp_socket.cpp
 	src/services.cpp)
+
 
 target_compile_definitions(toolkit PRIVATE BUILDING_TOOLKIT)
 
