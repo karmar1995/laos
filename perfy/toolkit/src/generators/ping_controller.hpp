@@ -1,5 +1,5 @@
 #include <vector>
-#include "irawsocket.h"
+#include "irawsocket.hpp"
 #include "generator.h"
 
 namespace toolkit {
@@ -38,7 +38,7 @@ namespace toolkit {
 
                         char buff[256] = {0};
                         m_rawSocket.receive(&buff[0], 256);
-                        listener.onPingReceived({buff, 256});
+                        //listener.onPingReceived({buff, 256});
 
                         sleep(info.interval);
 

@@ -1,4 +1,4 @@
-#include "icmp_generator.h"
+#include "icmp_generator.hpp"
 #include <iostream>
 #include "ping_controller.hpp"
 #include "raw_socket.hpp"

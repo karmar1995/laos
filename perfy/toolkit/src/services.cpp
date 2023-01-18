@@ -1,7 +1,7 @@
 #include "services.h"
-#include "tcp_generator.h"
-#include "udp_generator.h"
-#include "icmp_generator.h"
+#include "tcp_generator.hpp"
+#include "udp_generator.hpp"
+#include "icmp_generator.hpp"
 
 namespace toolkit {
 	struct GeneratorServices::Impl{
