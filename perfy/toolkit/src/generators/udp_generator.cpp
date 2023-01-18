@@ -1,42 +1,66 @@
 #include "udp_generator.hpp"
-#include <boost/asio/ip/address_v4.hpp>
+#include "udp_socket.hpp"
 #include <iostream>
 #include "ping_controller.hpp"
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-// TODO: Replace with OS agnostic headers
-#include <linux/udp.h>
 
-using boost::asio::ip::icmp;
-using boost::asio::ip::udp;
 using boost::asio::deadline_timer;
 
 
 namespace toolkit {
 namespace generators {
 
-	class UdpPingListener : IPingListener {
+	class UdpPingListener : public IPingListener {
         public:
-            void onPingBegin(const PingInfo&) override;
-            void onPingSent(std::vector<char> buffer) override;
-            void onPingReceived(std::vector<char> buffer) override;
-            void onPingEnd() override;
-            ~UdpPingListener();
+			
+			struct info
+			{
+				size_t sent;
+				size_t received;
+			};
+
+            void onPingBegin(const PingInfo&)
+			{
+				std::cout << "UDP ping begins" << std::endl;
+			}
+
+            void onPingSent(std::vector<char> buffer)
+			{
+				std::cout << "s\n"; 
+				(void)buffer;
+				m_info.sent++;
+			}
+
+            void onPingReceived(std::vector<char> buffer)
+			{
+				std::cout << "r\n"; 
+				(void)buffer;
+				m_info.received++;
+			}
+
+            void onPingEnd()
+			{
+				std::cout << "UDP ping ends" << std::endl;
+			}
+
+			const info& get_info() const
+			{
+				return m_info;
+			}
 		
 		private:
-			
+			info m_info{};
         };
 
 
-    class UdpPacketFactory : IPacketFactory {
+    class UdpPacketFactory : public IPacketFactory {
     public:
         std::vector<char> generateEchoPacket(size_t size)
 		{
 			return std::vector<char>(size, 0);
 		}
-
-        ~UdpPacketFactory();
     };
 
 	struct UdpGenerator::Impl
@@ -48,43 +72,22 @@ namespace generators {
 	UdpGenerator::~UdpGenerator() = default;
 
 	bool UdpGenerator::ping(const PingInfo& info)
-	{	
-		// Ping payload
-		std::vector<char> data(info.packetSize, 0);
-		boost::asio::streambuf rcv_buffer;
+	{
+		UdpPingListener listener;
+		UdpPacketFactory factory;
+		UdpRawSocket socket(info.target, info.port);
+		generators::PingController controller(factory, socket);
 
-		boost::asio::io_service io_service;
-		icmp::socket icmp_socket(io_service);
-		udp::socket udp_socket(io_service);
-		udp::resolver resolver(io_service);
-		icmp::resolver icmp_resolver(io_service);
-		udp::resolver::query query(info.target, "1337");
-		icmp::resolver::query icmp_query(info.target, "");
+		controller.ping(info, listener);
 
-		udp::endpoint remote_endpoint(resolver.resolve(query)->endpoint());
-		icmp::endpoint icmp_remote_endpoint(icmp_resolver.resolve(icmp_query)->endpoint());
-
-		udp_socket.open(remote_endpoint.protocol());
-		icmp_socket.open(icmp_remote_endpoint.protocol());
-
-		// Send the ping
-		boost::system::error_code err;
-		size_t sent = udp_socket.send_to(boost::asio::buffer(data), remote_endpoint, 0, err);
-		udp_socket.close();
-
-		if(sent == 0)
-		{
-			std::cerr << "UDP: " << err.message() << std::endl;
-			return false;
-		}
+		auto linfo = listener.get_info();
 
 		std::cout << "UDP: pinging " << info.target
 			<< " with interval: " << info.interval
-			<< " with packet size: " << info.packetSize << " (" << sent + sizeof(struct udphdr) << ')'
+			<< " with packet size: " << info.packetSize << " (" << linfo.sent + 8 << ')'
 			<< std::endl;
 
-		size_t received = icmp_socket.receive_from(rcv_buffer.prepare(65536), icmp_remote_endpoint);
-		std::cout << "Received: " << received << std::endl;
+		std::cout << "Received: " << linfo.received << std::endl;
 
 		return true;
 	}

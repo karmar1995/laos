@@ -10,7 +10,8 @@ namespace toolkit {
         class UdpRawSocket : public IRawSocket
 		{
 		public:
-			EConnectionError open(const std::string& targetIp, const std::string& service) override;
+            UdpRawSocket(const std::string& target, const std::string& service);
+			EConnectionError open(const std::string& target, const std::string& service) override;
             bool isOpen() const override;
             size_t send(char* buff, size_t len) override;
             size_t receive(char* buff, size_t len) override;
@@ -18,7 +19,9 @@ namespace toolkit {
 
 		private:
             boost::asio::io_service io_service;
-			boost::asio::ip::udp::socket m_socket;
+			boost::asio::ip::udp::socket m_udp_socket;
+            boost::asio::ip::icmp::socket m_icmp_socket;
+            boost::asio::ip::udp::endpoint m_endpoint;
         };
     }
 }

@@ -11,7 +11,8 @@ add_library(toolkit SHARED
 	src/generators/tcp_generator.cpp
 	src/generators/udp_generator.cpp
 	src/generators/icmp_generator.cpp
-	src/services.cpp src/generators/irawsocket.hpp src/generators/raw_socket.hpp src/generators/ping_controller.hpp)
+	src/generators/udp_socket.cpp
+	src/services.cpp)
 
 target_compile_definitions(toolkit PRIVATE BUILDING_TOOLKIT)
 

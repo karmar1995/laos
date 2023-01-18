@@ -1,5 +1,7 @@
 #pragma once
+#include <stdexcept>
 #include <unistd.h>
+#include <iostream>
 #include <vector>
 #include "irawsocket.hpp"
 #include "generator.hpp"
@@ -32,25 +34,41 @@ namespace toolkit {
             }
 
             void ping(const PingInfo& info, IPingListener& listener) {
-                m_rawSocket.open(info.target, 0);
+                m_rawSocket.open(info.target, info.port);
                 listener.onPingBegin(info);
                 if(m_rawSocket.isOpen()){
                     for(int i = 0; i < info.packetsNumber; i++ ){
                         std::vector<char> packet = m_packetFactory.generateEchoPacket(info.packetSize);
-                        m_rawSocket.send(packet.data(), packet.size());
+                        try
+                        {
+                            m_rawSocket.send(packet.data(), packet.size());
+                        }
+                        catch(const std::runtime_error& err)
+                        {
+                            std::cerr << "Error while sending message: " << err.what() << std::endl;
+                        }
+
                         listener.onPingSent(packet);
 
                         char buff[256];
-                        size_t received = m_rawSocket.receive(&buff[0], 256);
+                        size_t received;
+                        try
+                        {
+                            received = m_rawSocket.receive(&buff[0], 256);
+                        }
+                        catch(const std::runtime_error& err)
+                        {
+                            std::cerr << "Error while receiving message: " << err.what() << std::endl;
+                        }
+
                         if(received == 0)
                         {
                             // TODO
                         }
                         
-                        //listener.onPingReceived({buff, received});
+                        listener.onPingReceived({buff, buff+received});
 
-                        sleep(info.interval);
-
+                        sleep(info.interval); // usleep
                     }
                 }
                 listener.onPingEnd();
