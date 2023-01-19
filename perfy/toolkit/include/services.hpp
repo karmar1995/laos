@@ -2,7 +2,19 @@
 #include <memory>
 
 namespace toolkit {
-	class GeneratorServices{
+    class GeneratorServices;
+
+    class Services {
+    public:
+        Services();
+        ~Services();
+        GeneratorServices* generators();
+    private:
+        struct Impl;
+        std::unique_ptr<Impl> m_pImpl;
+    };
+
+   class GeneratorServices{
 	public:
 		GeneratorServices();
 		~GeneratorServices();

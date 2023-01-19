@@ -21,7 +21,7 @@ set(CMAKE_INSTALL_RPATH "${PROJECT_BINARY_DIR}/../install/lib")
 set(CMAKE_CXX_FLAGS "-g")
 
 add_executable(perfy
-	src/main.cpp)
+	src/main.cpp ui/include/perfy_ui.hpp ui/src/perfy_ui.cpp)
 
 add_subdirectory(toolkit)
 

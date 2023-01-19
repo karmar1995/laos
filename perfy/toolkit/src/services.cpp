@@ -24,4 +24,20 @@ namespace toolkit {
 	IGenerator* GeneratorServices::icmpGenerator() const {
 		return &m_pImpl->m_icmpGenerator;
 	}
+
+    struct Services::Impl {
+        GeneratorServices m_generators;
+    };
+
+    Services::Services() :  m_pImpl(new Impl()) {
+
+    }
+
+    Services::~Services() {
+
+    }
+
+    GeneratorServices *Services::generators() {
+        return &m_pImpl->m_generators;
+    }
 }

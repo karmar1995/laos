@@ -14,6 +14,6 @@ namespace toolkit {
 	class IGenerator {
 	public:
 		virtual ~IGenerator() = default;
-		virtual bool ping(const PingInfo&) = 0;
+		virtual bool ping(const PingInfo&, IPingListener*) = 0;
 	};
 }

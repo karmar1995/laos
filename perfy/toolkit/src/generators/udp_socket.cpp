@@ -14,42 +14,42 @@ namespace toolkit {
 				: m_udp_socket{io_service},
 				m_icmp_socket{io_service}
 			{
-				this->open(target, service);
 			}
 
 			EConnectionError UdpRawSocket::open(const std::string& target, const std::string& service)
 			{
-				udp::resolver::query u_query(target, service);
-				udp::resolver u_resolver(io_service);
+                try {
+                    udp::resolver::query u_query(target, service);
+                    udp::resolver u_resolver(io_service);
 
-				icmp::resolver::query i_query(target, "");
-				icmp::resolver i_resolver(io_service);
+                    icmp::resolver::query i_query(target, "");
+                    icmp::resolver i_resolver(io_service);
 
-				m_endpoint = u_resolver.resolve(u_query)->endpoint();
+                    boost::system::error_code err;
+                    m_endpoint = u_resolver.resolve(u_query)->endpoint();
+                    if (m_udp_socket.open(u_resolver.resolve(u_query)->endpoint().protocol(), err)) {
+                        std::cerr << err.message() << std::endl;
+                        this->close();
+                        return kCannotOpenSocket;
+                    }
+                    if (m_icmp_socket.open(i_resolver.resolve(i_query)->endpoint().protocol(), err)) {
+                        std::cerr << err.message() << std::endl;
+                        this->close();
+                        return kCannotOpenSocket;
+                    }
+                    if(!m_udp_socket.is_open() || !m_icmp_socket.is_open())
+                    {
+                        std::cerr << err.message() << std::endl;
+                        this->close();
+                        return kCannotOpenSocket;
+                    }
 
-				this->close();
+                }
+                catch(...) {
+                    std::cout<<"Open failed"<<std::endl;
+                    return kCannotOpenSocket;
 
-				boost::system::error_code err;
-				if(m_udp_socket.open(u_resolver.resolve(u_query)->endpoint().protocol(), err))
-				{
-					std::cerr << err.message() << std::endl;
-					this->close();
-					return kCannotOpenSocket;
-				}
-
-				if(m_icmp_socket.open(i_resolver.resolve(i_query)->endpoint().protocol(), err))
-				{
-					std::cerr << err.message() << std::endl;
-					this->close();
-					return kCannotOpenSocket;
-				}
-
-				if(!m_udp_socket.is_open() || !m_icmp_socket.is_open())
-				{
-					std::cerr << err.message() << std::endl;
-					this->close();
-					return kCannotOpenSocket;
-				}
+                }
 
 				return kOk;
 			}
