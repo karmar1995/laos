@@ -32,21 +32,21 @@ namespace toolkit {
 				boost::system::error_code err;
 				if(m_udp_socket.open(u_resolver.resolve(u_query)->endpoint().protocol(), err))
 				{
-					std::cerr << err.what() << std::endl;
+					std::cerr << err.message() << std::endl;
 					this->close();
 					return kCannotOpenSocket;
 				}
 
 				if(m_icmp_socket.open(i_resolver.resolve(i_query)->endpoint().protocol(), err))
 				{
-					std::cerr << err.what() << std::endl;
+					std::cerr << err.message() << std::endl;
 					this->close();
 					return kCannotOpenSocket;
 				}
 
 				if(!m_udp_socket.is_open() || !m_icmp_socket.is_open())
 				{
-					std::cerr << err.what() << std::endl;
+					std::cerr << err.message() << std::endl;
 					this->close();
 					return kCannotOpenSocket;
 				}
@@ -66,7 +66,7 @@ namespace toolkit {
 
 				if(sent == 0)
 				{
-					throw std::runtime_error(err.what());
+					throw std::runtime_error(err.message());
 				}
 
 				return sent;
@@ -79,7 +79,7 @@ namespace toolkit {
 
 				if(received == 0)
 				{
-					throw std::runtime_error(err.what());
+					throw std::runtime_error(err.message());
 				}
 
 				return received;
