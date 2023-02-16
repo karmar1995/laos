@@ -8,7 +8,7 @@ namespace toolkit {
 		int interval = 0;	// interval between packets
 		int packetSize = 0;	// packet size, in bytes
         int packetsNumber = 0;
-		std::string port = "http"; // port for tcp/udp
+		std::string port = "80"; // port for tcp/udp
 	};
 
 	class IGenerator {
