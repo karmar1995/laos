@@ -2,13 +2,16 @@
 #include <generator.hpp>
 #include <memory>
 
+
 namespace toolkit {
 	namespace generators {
+        class IPingListener;
+        class IRawSocket;
 
 		class UdpGenerator : public IGenerator
 		{
 		public:
-			UdpGenerator();
+			UdpGenerator(IPingListener&, IRawSocket&);
 			~UdpGenerator();
 			bool ping(const PingInfo&) override;
 		private:

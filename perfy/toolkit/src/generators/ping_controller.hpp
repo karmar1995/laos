@@ -5,18 +5,10 @@
 #include <vector>
 #include "irawsocket.hpp"
 #include "generator.hpp"
+#include "ipinglistener.hpp"
 
 namespace toolkit {
     namespace generators{
-
-        class IPingListener {
-        public:
-            virtual void onPingBegin(const PingInfo&) = 0;
-            virtual void onPingSent(std::vector<char> buffer) = 0;
-            virtual void onPingReceived(std::vector<char> buffer) = 0;
-            virtual void onPingEnd() = 0;
-            ~IPingListener() = default;
-        };
 
         class IPacketFactory {
         public:
@@ -33,10 +25,10 @@ namespace toolkit {
 
             }
 
-            void ping(const PingInfo& info, IPingListener& listener) {
+            bool ping(const PingInfo& info, IPingListener& listener) {
                 m_rawSocket.open(info.target, info.port);
-                listener.onPingBegin(info);
                 if(m_rawSocket.isOpen()){
+                    listener.onPingBegin(info);
                     for(int i = 0; i < info.packetsNumber; i++ ){
                         std::vector<char> packet = m_packetFactory.generateEchoPacket(info.packetSize);
                         try
@@ -70,9 +62,11 @@ namespace toolkit {
 
                         sleep(info.interval); // usleep
                     }
+                    listener.onPingEnd();
+                    m_rawSocket.close();
+                    return true;
                 }
-                listener.onPingEnd();
-                m_rawSocket.close();
+                return false;
             }
 
 

@@ -10,11 +10,8 @@ using boost::asio::ip::icmp;
 namespace toolkit {
     namespace generators {
 
-			UdpRawSocket::UdpRawSocket(const std::string& target, const std::string& service)
-				: m_udp_socket{io_service},
-				m_icmp_socket{io_service}
+			UdpRawSocket::UdpRawSocket(): m_udp_socket{io_service}, m_icmp_socket{io_service}
 			{
-				this->open(target, service);
 			}
 
 			EConnectionError UdpRawSocket::open(const std::string& target, const std::string& service)

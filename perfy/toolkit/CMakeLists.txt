@@ -12,7 +12,7 @@ add_library(toolkit SHARED
 	src/generators/udp_generator.cpp
 	src/generators/icmp_generator.cpp
 	src/generators/udp_socket.cpp
-	src/services.cpp)
+	src/services.cpp src/generators/udp_ping_listener.cpp src/generators/udp_ping_listener.hpp src/generators/ipinglistener.hpp)
 
 target_compile_definitions(toolkit PRIVATE BUILDING_TOOLKIT)
 

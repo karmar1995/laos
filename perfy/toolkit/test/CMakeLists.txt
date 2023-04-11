@@ -12,7 +12,7 @@ find_package(Boost 1.74 REQUIRED
 
 add_executable(toolkit_test
 	src/services_tests.cpp
-	)
+        src/fake_socket.cpp src/fake_socket.hpp src/fake_ping_listener.cpp src/fake_ping_listener.hpp)
 
 #message("boost unit test: ${Boost_LIBRARIES}")
 

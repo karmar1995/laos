@@ -2,12 +2,21 @@
 #include "tcp_generator.hpp"
 #include "udp_generator.hpp"
 #include "icmp_generator.hpp"
+#include "udp_socket.hpp"
+#include "udp_ping_listener.hpp"
 
 namespace toolkit {
 	struct GeneratorServices::Impl{
-		generators::TcpGenerator m_tcpGenerator;
-		generators::UdpGenerator m_udpGenerator;
-		generators::IcmpGenerator m_icmpGenerator;
+        generators::UdpRawSocket m_udpSocket;
+        UdpPingListener m_pingListener;
+        generators::TcpGenerator m_tcpGenerator;
+        generators::UdpGenerator m_udpGenerator;
+        generators::IcmpGenerator m_icmpGenerator;
+
+        Impl() : m_udpGenerator(m_pingListener, m_udpSocket)
+        {
+
+        }
 	};
 
 	GeneratorServices::GeneratorServices() : m_pImpl(new Impl) {}

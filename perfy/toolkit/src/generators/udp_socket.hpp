@@ -10,7 +10,7 @@ namespace toolkit {
         class UdpRawSocket : public IRawSocket
 		{
 		public:
-            UdpRawSocket(const std::string& target, const std::string& service);
+            UdpRawSocket();
 			EConnectionError open(const std::string& target, const std::string& service) override;
             bool isOpen() const override;
             size_t send(char* buff, size_t len) override;
